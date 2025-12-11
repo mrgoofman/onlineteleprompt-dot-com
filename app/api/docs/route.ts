@@ -3,8 +3,6 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getGoogleDocContent } from "@/lib/google";
 
-export const runtime = 'edge';
-
 export async function GET(req: NextRequest) {
     const session = await getServerSession(authOptions);
 

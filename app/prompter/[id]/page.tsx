@@ -8,8 +8,6 @@ import { Settings, Play, Pause, RotateCw, ArrowLeft, Minus, Plus } from "lucide-
 import Link from "next/link";
 import { clsx } from "clsx";
 
-export const runtime = 'edge';
-
 export default function PrompterPage() {
     const params = useParams();
     const { data: session } = useSession();

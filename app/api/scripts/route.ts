@@ -1,6 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-
-export const runtime = 'edge';
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { MockD1Database } from "@/lib/mock-db";

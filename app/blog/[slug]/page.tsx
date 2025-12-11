@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { Metadata } from "next";
 
-export const runtime = 'edge';
 export const dynamicParams = false;
 
 interface Props {
