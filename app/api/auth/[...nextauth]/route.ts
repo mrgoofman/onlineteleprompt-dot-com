@@ -45,8 +45,20 @@ function getAuthOptions(): NextAuthOptions {
 }
 
 async function handler(req: NextRequest, context: { params: Promise<{ nextauth: string[] }> }) {
-    const authOptions = getAuthOptions();
-    return NextAuth(req, context, authOptions);
+    try {
+        const authOptions = getAuthOptions();
+        return await NextAuth(req, context, authOptions);
+    } catch (error) {
+        console.error("NextAuth error:", error);
+        return new Response(JSON.stringify({
+            error: "Auth error",
+            message: error instanceof Error ? error.message : String(error),
+            stack: error instanceof Error ? error.stack : undefined
+        }), {
+            status: 500,
+            headers: { "Content-Type": "application/json" }
+        });
+    }
 }
 
 export { handler as GET, handler as POST };
