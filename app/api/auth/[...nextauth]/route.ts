@@ -97,9 +97,9 @@ async function handler(req: NextRequest, context: { params: Promise<{ nextauth: 
         headers: Object.fromEntries(req.headers.entries()),
     });
 
-    // Intercept signin/google and use manual redirect
-    if (path === "signin/google" && req.method === "GET") {
-        console.log("Using manual Google OAuth redirect");
+    // Intercept signin/google and use manual redirect (both GET and POST)
+    if (path === "signin/google") {
+        console.log("Using manual Google OAuth redirect, method:", req.method);
         try {
             return await manualGoogleRedirect(req);
         } catch (error) {
