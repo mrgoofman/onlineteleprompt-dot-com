@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import GoogleProvider from "next-auth/providers/google";
+import * as crypto from "crypto";
 
 export const dynamic = "force-dynamic";
 
@@ -15,6 +16,19 @@ export async function GET() {
     };
 
     try {
+        // Test crypto functions that NextAuth uses
+        results.step = "testing crypto.randomBytes";
+        const randomBytes = crypto.randomBytes(32);
+        results.randomBytesOk = randomBytes.length === 32;
+
+        results.step = "testing crypto.createHash";
+        const hash = crypto.createHash("sha256").update("test").digest("hex");
+        results.hashOk = hash.length === 64;
+
+        results.step = "testing crypto.randomUUID";
+        const uuid = crypto.randomUUID();
+        results.uuidOk = uuid.length === 36;
+
         results.step = "creating provider";
         const provider = GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -25,14 +39,6 @@ export async function GET() {
         results.providerId = provider.id;
         results.providerName = provider.name;
         results.providerType = provider.type;
-
-        // Try to get authorization URL
-        results.step = "checking authorization";
-        if (provider.authorization) {
-            results.authorization = typeof provider.authorization === 'string'
-                ? provider.authorization
-                : provider.authorization;
-        }
 
         results.step = "complete";
         results.success = true;
