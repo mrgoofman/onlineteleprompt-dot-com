@@ -3,6 +3,9 @@ name = "onlineteleprompt-dot-com"
 compatibility_date = "2024-09-23"
 compatibility_flags = ["nodejs_compat"]
 
+# Required for Cloudflare Pages to recognize the build output
+pages_build_output_dir = ".open-next"
+
 # D1 Database binding
 [[d1_databases]]
 binding = "DB"
