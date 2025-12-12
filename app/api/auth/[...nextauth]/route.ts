@@ -43,6 +43,7 @@ function getAuthOptions(): NextAuthOptions {
         secret: process.env.NEXTAUTH_SECRET,
         debug: true,
         // Cookie configuration for Cloudflare Workers - SameSite=None required for cross-site OAuth redirects
+        // Note: Don't set domain - let browser default to current host. __Host- prefix requires no domain.
         cookies: {
             sessionToken: {
                 name: `__Secure-next-auth.session-token`,
@@ -51,7 +52,6 @@ function getAuthOptions(): NextAuthOptions {
                     sameSite: 'none',
                     path: '/',
                     secure: true,
-                    domain: 'teleprompter24.com'
                 }
             },
             callbackUrl: {
@@ -61,7 +61,6 @@ function getAuthOptions(): NextAuthOptions {
                     sameSite: 'none',
                     path: '/',
                     secure: true,
-                    domain: 'teleprompter24.com'
                 }
             },
             csrfToken: {
@@ -81,7 +80,6 @@ function getAuthOptions(): NextAuthOptions {
                     path: '/',
                     secure: true,
                     maxAge: 3600,
-                    domain: 'teleprompter24.com'
                 }
             },
             state: {
@@ -92,7 +90,6 @@ function getAuthOptions(): NextAuthOptions {
                     path: '/',
                     secure: true,
                     maxAge: 3600,
-                    domain: 'teleprompter24.com'
                 }
             },
             nonce: {
@@ -102,7 +99,6 @@ function getAuthOptions(): NextAuthOptions {
                     sameSite: 'none',
                     path: '/',
                     secure: true,
-                    domain: 'teleprompter24.com'
                 }
             }
         },
@@ -165,7 +161,6 @@ async function manualGoogleRedirect(req: NextRequest): Promise<Response> {
         sameSite: "none",
         maxAge: 3600, // 1 hour
         path: "/",
-        domain: "teleprompter24.com",
     });
 
     return response;
@@ -175,25 +170,23 @@ async function handler(req: NextRequest, context: { params: Promise<{ nextauth: 
     const params = await context.params;
     const path = params.nextauth?.join("/") || "";
 
-    // Log request details for debugging
-    console.log("NextAuth request:", {
-        path,
-        method: req.method,
-        url: req.url,
-        headers: Object.fromEntries(req.headers.entries()),
-    });
-
-    // Intercept signin/google and use manual redirect (both GET and POST)
-    if (path === "signin/google") {
-        console.log("Using manual Google OAuth redirect, method:", req.method);
-        try {
-            return await manualGoogleRedirect(req);
-        } catch (error) {
-            console.error("Manual redirect failed:", error);
-            // Fall through to NextAuth
-        }
+    // Debug endpoint - keep manual redirect for testing
+    if (path === "signin/google" && req.nextUrl.searchParams.get("debug") === "true") {
+        return await manualGoogleRedirect(req);
     }
 
+    // Log callback requests to debug cookie issues
+    if (path.startsWith("callback")) {
+        console.log("OAuth Callback:", {
+            path,
+            url: req.url,
+            cookies: req.cookies.getAll().map(c => c.name),
+            hasStateCookie: !!req.cookies.get("__Secure-next-auth.state"),
+            hasPkceCookie: !!req.cookies.get("__Secure-next-auth.pkce.code_verifier"),
+        });
+    }
+
+    // Let NextAuth handle everything with our cookie config
     try {
         const authOptions = getAuthOptions();
         return await NextAuth(req, context, authOptions);
