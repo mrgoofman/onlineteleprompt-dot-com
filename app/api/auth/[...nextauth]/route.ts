@@ -42,6 +42,70 @@ function getAuthOptions(): NextAuthOptions {
         },
         secret: process.env.NEXTAUTH_SECRET,
         debug: true,
+        // Cookie configuration for Cloudflare Workers - SameSite=None required for cross-site OAuth redirects
+        cookies: {
+            sessionToken: {
+                name: `__Secure-next-auth.session-token`,
+                options: {
+                    httpOnly: true,
+                    sameSite: 'none',
+                    path: '/',
+                    secure: true,
+                    domain: 'teleprompter24.com'
+                }
+            },
+            callbackUrl: {
+                name: `__Secure-next-auth.callback-url`,
+                options: {
+                    httpOnly: true,
+                    sameSite: 'none',
+                    path: '/',
+                    secure: true,
+                    domain: 'teleprompter24.com'
+                }
+            },
+            csrfToken: {
+                name: `__Host-next-auth.csrf-token`,
+                options: {
+                    httpOnly: true,
+                    sameSite: 'none',
+                    path: '/',
+                    secure: true,
+                }
+            },
+            pkceCodeVerifier: {
+                name: `__Secure-next-auth.pkce.code_verifier`,
+                options: {
+                    httpOnly: true,
+                    sameSite: 'none',
+                    path: '/',
+                    secure: true,
+                    maxAge: 3600,
+                    domain: 'teleprompter24.com'
+                }
+            },
+            state: {
+                name: `__Secure-next-auth.state`,
+                options: {
+                    httpOnly: true,
+                    sameSite: 'none',
+                    path: '/',
+                    secure: true,
+                    maxAge: 3600,
+                    domain: 'teleprompter24.com'
+                }
+            },
+            nonce: {
+                name: `__Secure-next-auth.nonce`,
+                options: {
+                    httpOnly: true,
+                    sameSite: 'none',
+                    path: '/',
+                    secure: true,
+                    domain: 'teleprompter24.com'
+                }
+            }
+        },
     };
 }
 
@@ -77,9 +141,10 @@ async function manualGoogleRedirect(req: NextRequest): Promise<Response> {
     response.cookies.set("oauth_state", encodedState, {
         httpOnly: true,
         secure: true,
-        sameSite: "lax",
-        maxAge: 600, // 10 minutes
+        sameSite: "none",
+        maxAge: 3600, // 1 hour
         path: "/",
+        domain: "teleprompter24.com",
     });
 
     return response;
