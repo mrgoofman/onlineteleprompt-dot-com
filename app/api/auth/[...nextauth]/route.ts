@@ -113,6 +113,7 @@ function getAuthOptions(): NextAuthOptions {
 async function manualGoogleRedirect(req: NextRequest): Promise<Response> {
     const baseUrl = process.env.NEXTAUTH_URL || "https://teleprompter24.com";
     const callbackUrl = req.nextUrl.searchParams.get("callbackUrl") || baseUrl;
+    const isDebug = req.nextUrl.searchParams.get("debug") === "true";
 
     // Generate state and PKCE values
     const state = crypto.randomBytes(32).toString("hex");
@@ -136,6 +137,26 @@ async function manualGoogleRedirect(req: NextRequest): Promise<Response> {
     });
 
     const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
+
+    // Debug mode - return JSON instead of redirecting
+    if (isDebug) {
+        return NextResponse.json({
+            success: true,
+            message: "Debug mode - not redirecting. Copy authUrl and paste in browser.",
+            authUrl,
+            redirectUri: `${baseUrl}/api/auth/callback/google`,
+            state: state.substring(0, 20) + "...",
+            env: {
+                GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID ? process.env.GOOGLE_CLIENT_ID.substring(0, 20) + "..." : "MISSING",
+                NEXTAUTH_URL: process.env.NEXTAUTH_URL || "MISSING",
+                NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET ? "SET" : "MISSING",
+            },
+            cookieToSet: {
+                name: "oauth_state",
+                value: encodedState.substring(0, 50) + "...",
+            }
+        });
+    }
 
     const response = NextResponse.redirect(authUrl);
     response.cookies.set("oauth_state", encodedState, {
