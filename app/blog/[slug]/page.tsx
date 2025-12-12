@@ -1,11 +1,12 @@
 import Link from "next/link";
-import { getPostBySlug, getAllPosts } from "@/lib/blog";
+import { getPostBySlug } from "@/lib/blog";
 import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { Metadata } from "next";
 
-export const dynamicParams = false;
+// Dynamic rendering
+export const dynamic = "force-dynamic";
 
 interface Props {
     params: Promise<{ slug: string }>;
@@ -19,14 +20,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         title: `${post.title} - Teleprompter24 Blog`,
         description: post.excerpt,
     };
-}
-
-// Generate static params for all known posts at build time
-export async function generateStaticParams() {
-    const posts = getAllPosts();
-    return posts.map((post) => ({
-        slug: post.slug,
-    }));
 }
 
 export default async function BlogPostPage({ params }: Props) {

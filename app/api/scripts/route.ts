@@ -1,33 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { MockD1Database } from "@/lib/mock-db";
+import { getDB, D1Database } from "@/lib/db";
 
-// Cloudflare D1 Type Definition
-interface D1Database {
-    prepare: (query: string) => D1PreparedStatement;
-}
-
-interface D1PreparedStatement {
-    bind: (...values: any[]) => D1PreparedStatement;
-    run: <T = unknown>() => Promise<D1Result<T>>;
-    all: <T = unknown>() => Promise<D1Result<T>>;
-}
-
-interface D1Result<T = unknown> {
-    results: T[];
-    success: boolean;
-    error?: string;
-    meta: any;
-}
-
-// export const runtime = "edge"; // REMOVED for mocked local dev
 export const dynamic = "force-dynamic";
 
-function getDB() {
-    if (process.env.DB) return process.env.DB as unknown as D1Database;
-    // Fallback to mock DB for local development
-    return new MockD1Database() as unknown as D1Database;
+// Helper to get D1 from Cloudflare context
+function getCloudflareDB(request: NextRequest): D1Database {
+    // In Cloudflare Pages, the D1 binding is available via getRequestContext
+    // For @cloudflare/next-on-pages, access via process.env
+    const env = (process.env as unknown as { DB?: D1Database });
+    return getDB(env);
 }
 
 export async function GET(req: NextRequest) {
@@ -37,7 +20,7 @@ export async function GET(req: NextRequest) {
     }
 
     try {
-        const db = getDB();
+        const db = getCloudflareDB(req);
         const { results } = await db.prepare(
             "SELECT * FROM scripts WHERE user_email = ? ORDER BY created_at DESC"
         )
@@ -60,7 +43,7 @@ export async function POST(req: NextRequest) {
     const { id, title, url } = await req.json();
 
     try {
-        const db = getDB();
+        const db = getCloudflareDB(req);
         await db.prepare(
             "INSERT INTO scripts (id, user_email, title, url, created_at) VALUES (?, ?, ?, ?, ?)"
         )
@@ -84,7 +67,7 @@ export async function DELETE(req: NextRequest) {
     const id = searchParams.get("id");
 
     try {
-        const db = getDB();
+        const db = getCloudflareDB(req);
         await db.prepare(
             "DELETE FROM scripts WHERE id = ? AND user_email = ?"
         )

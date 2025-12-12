@@ -1,34 +1,52 @@
-import { google } from "googleapis";
+// Edge-compatible Google Docs API using fetch
+// This replaces the 'googleapis' library which uses Node.js internals
+
+interface GoogleDocsResponse {
+    title?: string;
+    body?: {
+        content?: Array<{
+            paragraph?: {
+                elements?: Array<{
+                    textRun?: {
+                        content?: string;
+                    };
+                }>;
+            };
+        }>;
+    };
+}
 
 export async function getGoogleDocContent(docId: string, accessToken: string) {
-    const auth = new google.auth.OAuth2();
-    auth.setCredentials({ access_token: accessToken });
+    const response = await fetch(
+        `https://docs.googleapis.com/v1/documents/${docId}`,
+        {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        }
+    );
 
-    const docs = google.docs({ version: "v1", auth });
-
-    try {
-        const res = await docs.documents.get({
-            documentId: docId,
-        });
-
-        const content = res.data.body?.content;
-        if (!content) return "";
-
-        let text = "";
-        content.forEach((element) => {
-            if (element.paragraph) {
-                element.paragraph.elements?.forEach((el) => {
-                    if (el.textRun?.content) {
-                        text += el.textRun.content;
-                    }
-                });
-                text += "\n"; // Improve paragraph spacing logic if needed
-            }
-        });
-
-        return { title: res.data.title, text };
-    } catch (error) {
-        console.error("Error fetching doc:", error);
-        throw error;
+    if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Google Docs API error:", response.status, errorText);
+        throw new Error(`Failed to fetch document: ${response.status}`);
     }
+
+    const data: GoogleDocsResponse = await response.json();
+
+    const content = data.body?.content;
+    if (!content) return { title: data.title || "Untitled", text: "" };
+
+    let text = "";
+    content.forEach((element) => {
+        if (element.paragraph) {
+            element.paragraph.elements?.forEach((el) => {
+                if (el.textRun?.content) {
+                    text += el.textRun.content;
+                }
+            });
+        }
+    });
+
+    return { title: data.title || "Untitled", text };
 }
