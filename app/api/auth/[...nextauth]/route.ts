@@ -170,8 +170,8 @@ async function handler(req: NextRequest, context: { params: Promise<{ nextauth: 
     const params = await context.params;
     const path = params.nextauth?.join("/") || "";
 
-    // Debug endpoint - keep manual redirect for testing
-    if (path === "signin/google" && req.nextUrl.searchParams.get("debug") === "true") {
+    // Use manual redirect for signin/google - NextAuth's signin is broken on Cloudflare Workers
+    if (path === "signin/google") {
         return await manualGoogleRedirect(req);
     }
 
@@ -183,10 +183,11 @@ async function handler(req: NextRequest, context: { params: Promise<{ nextauth: 
             cookies: req.cookies.getAll().map(c => c.name),
             hasStateCookie: !!req.cookies.get("__Secure-next-auth.state"),
             hasPkceCookie: !!req.cookies.get("__Secure-next-auth.pkce.code_verifier"),
+            hasOurCookie: !!req.cookies.get("oauth_state"),
         });
     }
 
-    // Let NextAuth handle everything with our cookie config
+    // Let NextAuth handle callback and other routes
     try {
         const authOptions = getAuthOptions();
         return await NextAuth(req, context, authOptions);
