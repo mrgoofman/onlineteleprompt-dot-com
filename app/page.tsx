@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useSession } from "next-auth/react";
+import { useSession, signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Video, FileText, Smartphone, Zap, Check, ArrowRight, RefreshCw, Play } from "lucide-react";
@@ -18,8 +18,7 @@ export default function LandingPage() {
   }, [status, router]);
 
   const handleLogin = () => {
-    // Direct navigation - bypasses next-auth/react fetch issues
-    window.location.href = "/api/auth/signin/google?callbackUrl=%2Fscripts";
+    signIn("google", { callbackUrl: "/scripts" });
   };
 
   return (

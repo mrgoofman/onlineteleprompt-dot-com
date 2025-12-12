@@ -26,7 +26,5 @@ database_id = "a4acf907-f82f-411a-8b20-feecde86e3fc"
 # IMPORTANT: GOOGLE_CLIENT_ID goes here - it's public (visible in OAuth URLs)
 # Secrets (GOOGLE_CLIENT_SECRET, NEXTAUTH_SECRET) are set via: wrangler secret put <NAME>
 [vars]
-NEXTAUTH_URL = "https://teleprompter24.com"
-AUTH_URL = "https://teleprompter24.com"
 AUTH_TRUST_HOST = "true"
-GOOGLE_CLIENT_ID = "105926470554-638o8f3v1pll14nu5kkmrcjlh5bh5ep9.apps.googleusercontent.com"
+AUTH_GOOGLE_ID = "105926470554-638o8f3v1pll14nu5kkmrcjlh5bh5ep9.apps.googleusercontent.com"
