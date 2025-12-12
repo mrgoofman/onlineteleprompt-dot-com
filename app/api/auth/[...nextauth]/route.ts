@@ -1,6 +1,7 @@
 import NextAuth, { type NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import * as crypto from "crypto";
 
 export const dynamic = "force-dynamic";
 
@@ -44,7 +45,69 @@ function getAuthOptions(): NextAuthOptions {
     };
 }
 
+// Manual OAuth redirect as fallback - bypasses NextAuth's problematic signin flow
+async function manualGoogleRedirect(req: NextRequest): Promise<Response> {
+    const baseUrl = process.env.NEXTAUTH_URL || "https://teleprompter24.com";
+    const callbackUrl = req.nextUrl.searchParams.get("callbackUrl") || baseUrl;
+
+    // Generate state and PKCE values
+    const state = crypto.randomBytes(32).toString("hex");
+    const codeVerifier = crypto.randomBytes(32).toString("base64url");
+    const codeChallenge = crypto.createHash("sha256").update(codeVerifier).digest("base64url");
+
+    // Store state and code_verifier in cookies for callback verification
+    const stateData = JSON.stringify({ state, codeVerifier, callbackUrl });
+    const encodedState = Buffer.from(stateData).toString("base64url");
+
+    const params = new URLSearchParams({
+        client_id: process.env.GOOGLE_CLIENT_ID!,
+        redirect_uri: `${baseUrl}/api/auth/callback/google`,
+        response_type: "code",
+        scope: "openid email profile https://www.googleapis.com/auth/documents.readonly https://www.googleapis.com/auth/drive.readonly",
+        state: state,
+        code_challenge: codeChallenge,
+        code_challenge_method: "S256",
+        access_type: "offline",
+        prompt: "consent",
+    });
+
+    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
+
+    const response = NextResponse.redirect(authUrl);
+    response.cookies.set("oauth_state", encodedState, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "lax",
+        maxAge: 600, // 10 minutes
+        path: "/",
+    });
+
+    return response;
+}
+
 async function handler(req: NextRequest, context: { params: Promise<{ nextauth: string[] }> }) {
+    const params = await context.params;
+    const path = params.nextauth?.join("/") || "";
+
+    // Log request details for debugging
+    console.log("NextAuth request:", {
+        path,
+        method: req.method,
+        url: req.url,
+        headers: Object.fromEntries(req.headers.entries()),
+    });
+
+    // Intercept signin/google and use manual redirect
+    if (path === "signin/google" && req.method === "GET") {
+        console.log("Using manual Google OAuth redirect");
+        try {
+            return await manualGoogleRedirect(req);
+        } catch (error) {
+            console.error("Manual redirect failed:", error);
+            // Fall through to NextAuth
+        }
+    }
+
     try {
         const authOptions = getAuthOptions();
         return await NextAuth(req, context, authOptions);
@@ -53,7 +116,9 @@ async function handler(req: NextRequest, context: { params: Promise<{ nextauth: 
         return new Response(JSON.stringify({
             error: "Auth error",
             message: error instanceof Error ? error.message : String(error),
-            stack: error instanceof Error ? error.stack : undefined
+            stack: error instanceof Error ? error.stack : undefined,
+            path,
+            method: req.method,
         }), {
             status: 500,
             headers: { "Content-Type": "application/json" }
