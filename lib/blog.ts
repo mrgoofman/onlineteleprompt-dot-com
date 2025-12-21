@@ -12,7 +12,7 @@ export const posts: BlogPost[] = [
     slug: "free-online-teleprompter",
     title: "Free Online Teleprompter: Read Scripts Naturally on iPad, Android & Any Tablet",
     excerpt: "A free online teleprompter runs in your browser, works on iPad, Android, and any tablet, and lets you start speaking naturally within seconds.",
-    date: "2025-12-14",
+    date: "2025-12-10",
     author: "Teleprompter24 Team",
     content: `
       <p>If you search for a teleprompter, chances are one of the first words you type is <strong>"free."</strong> And that makes sense. Many creators, students, and professionals don't need a complex setup — they just want to read a script smoothly without memorizing it.</p>
@@ -184,7 +184,7 @@ export const posts: BlogPost[] = [
     slug: "online-teleprompter-vs-ipad-apps",
     title: "Online Teleprompter vs iPad Teleprompter Apps: What Creators Should Use Today",
     excerpt: "Both promise smoother delivery, better eye contact, and faster recording. But depending on how you work, one of them is clearly the better choice.",
-    date: "2025-12-13",
+    date: "2025-12-11",
     author: "Teleprompter24 Team",
     content: `
       <p>If you search for a teleprompter today, you'll quickly run into two options: <strong>online teleprompters that run in your browser</strong>, and <strong>native iPad teleprompter apps from the App Store</strong>.</p>
@@ -361,7 +361,7 @@ export const posts: BlogPost[] = [
     slug: "best-online-teleprompter-2025",
     title: "The Best Online Teleprompter in 2025",
     excerpt: "Works on iPad & Tablets — No Download Required. Creating videos, presentations, or live talks in 2025 looks very different than it did just a few years ago.",
-    date: "2025-12-12",
+    date: "2025-12-09",
     author: "Teleprompter24 Team",
     content: `
       <p><em>(Works on iPad & Tablets — No Download Required)</em></p>

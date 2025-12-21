@@ -46,3 +46,6 @@ next-env.d.ts
 
 # opennext build output
 .open-next/
+
+# development documentation (not for public repo)
+DEVELOPMENT.md

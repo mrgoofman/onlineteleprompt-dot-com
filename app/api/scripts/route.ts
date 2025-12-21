@@ -1,15 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { getDB, D1Database } from "@/lib/db";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 
 export const dynamic = "force-dynamic";
 
 // Helper to get D1 from Cloudflare context
-function getCloudflareDB(request: NextRequest): D1Database {
-    // In Cloudflare Pages, the D1 binding is available via getRequestContext
-    // For @cloudflare/next-on-pages, access via process.env
-    const env = (process.env as unknown as { DB?: D1Database });
-    return getDB(env);
+function getCloudflareDB() {
+    const { env } = getCloudflareContext();
+    return env.DB;
 }
 
 export async function GET(req: NextRequest) {
@@ -19,7 +17,7 @@ export async function GET(req: NextRequest) {
     }
 
     try {
-        const db = getCloudflareDB(req);
+        const db = getCloudflareDB();
         const { results } = await db.prepare(
             "SELECT * FROM scripts WHERE user_email = ? ORDER BY created_at DESC"
         )
@@ -39,10 +37,10 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { id, title, url } = await req.json();
+    const { id, title, url } = await req.json() as { id: string; title: string; url: string };
 
     try {
-        const db = getCloudflareDB(req);
+        const db = getCloudflareDB();
         await db.prepare(
             "INSERT INTO scripts (id, user_email, title, url, created_at) VALUES (?, ?, ?, ?, ?)"
         )
@@ -66,7 +64,7 @@ export async function DELETE(req: NextRequest) {
     const id = searchParams.get("id");
 
     try {
-        const db = getCloudflareDB(req);
+        const db = getCloudflareDB();
         await db.prepare(
             "DELETE FROM scripts WHERE id = ? AND user_email = ?"
         )

@@ -28,7 +28,7 @@ export default function PrompterPage() {
         try {
             const res = await fetch(`/api/docs?id=${params.id}`);
             if (!res.ok) throw new Error("Failed to fetch doc");
-            const data = await res.json();
+            const data: { text: string } = await res.json();
             setText(data.text);
         } catch (err) {
             setError("Could not load document. Make sure you have access.");
@@ -100,20 +100,32 @@ export default function PrompterPage() {
 
     return (
         <div className="relative flex h-screen flex-col bg-black text-white overflow-hidden">
-            {/* Controls Header */}
-            <div className="absolute top-0 left-0 right-0 z-50 flex items-center justify-between bg-zinc-900/80 p-4 transition-opacity hover:opacity-100 opacity-0 md:opacity-100">
-                <div className="flex items-center gap-4">
+            {/* Controls Header - Always visible, responsive layout */}
+            <div className="absolute top-0 left-0 right-0 z-50 flex flex-col sm:flex-row items-center justify-between bg-zinc-900/90 backdrop-blur-sm p-2 sm:p-4 gap-2 sm:gap-0">
+                <div className="flex items-center gap-2 sm:gap-4 w-full sm:w-auto justify-between sm:justify-start">
                     <Link href="/scripts" className="text-zinc-400 hover:text-white">
-                        <ArrowLeft className="h-6 w-6" />
+                        <ArrowLeft className="h-5 w-5 sm:h-6 sm:w-6" />
                     </Link>
-                    <Button variant="ghost" size="icon" onClick={fetchDoc} title="Refresh Content">
-                        <RotateCw className="h-5 w-5" />
+                    <Button variant="ghost" size="icon" onClick={fetchDoc} title="Refresh Content" className="h-8 w-8 sm:h-10 sm:w-10">
+                        <RotateCw className="h-4 w-4 sm:h-5 sm:w-5" />
+                    </Button>
+
+                    {/* Play button - visible on mobile in header */}
+                    <Button
+                        size="icon"
+                        className={clsx(
+                            "sm:hidden h-10 w-10",
+                            isPlaying ? "bg-red-500 hover:bg-red-600" : "bg-primary hover:bg-primary/90"
+                        )}
+                        onClick={() => setIsPlaying(!isPlaying)}
+                    >
+                        {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
                     </Button>
                 </div>
 
-                <div className="flex items-center gap-6">
-                    <div className="flex items-center gap-2">
-                        <span className="text-xs text-zinc-400">SPEED</span>
+                <div className="flex items-center gap-2 sm:gap-6 flex-wrap justify-center">
+                    <div className="flex items-center gap-1 sm:gap-2">
+                        <span className="text-[10px] sm:text-xs text-zinc-400">SPEED</span>
                         <input
                             type="range"
                             min="0"
@@ -121,17 +133,17 @@ export default function PrompterPage() {
                             step="0.5"
                             value={speed}
                             onChange={(e) => setSpeed(parseFloat(e.target.value))}
-                            className="w-24 accent-primary"
+                            className="w-16 sm:w-24 accent-primary"
                         />
                     </div>
 
-                    <div className="flex items-center gap-2">
-                        <Button variant="ghost" size="icon" onClick={() => setFontSize(s => Math.max(20, s - 4))}>
-                            <Minus className="h-4 w-4" />
+                    <div className="flex items-center gap-1">
+                        <Button variant="ghost" size="icon" onClick={() => setFontSize(s => Math.max(20, s - 4))} className="h-7 w-7 sm:h-10 sm:w-10">
+                            <Minus className="h-3 w-3 sm:h-4 sm:w-4" />
                         </Button>
-                        <span className="text-sm font-mono w-8 text-center">{fontSize}</span>
-                        <Button variant="ghost" size="icon" onClick={() => setFontSize(s => Math.min(200, s + 4))}>
-                            <Plus className="h-4 w-4" />
+                        <span className="text-xs sm:text-sm font-mono w-6 sm:w-8 text-center">{fontSize}</span>
+                        <Button variant="ghost" size="icon" onClick={() => setFontSize(s => Math.min(200, s + 4))} className="h-7 w-7 sm:h-10 sm:w-10">
+                            <Plus className="h-3 w-3 sm:h-4 sm:w-4" />
                         </Button>
                     </div>
 
@@ -139,13 +151,18 @@ export default function PrompterPage() {
                         variant={isMirrored ? "default" : "secondary"}
                         size="sm"
                         onClick={() => setIsMirrored(!isMirrored)}
+                        className="text-xs sm:text-sm h-7 sm:h-9 px-2 sm:px-3"
                     >
                         Mirror
                     </Button>
 
+                    {/* Play button - hidden on mobile (shown above) */}
                     <Button
                         size="icon"
-                        className={isPlaying ? "bg-red-500 hover:bg-red-600" : "bg-primary hover:bg-primary/90"}
+                        className={clsx(
+                            "hidden sm:flex",
+                            isPlaying ? "bg-red-500 hover:bg-red-600" : "bg-primary hover:bg-primary/90"
+                        )}
                         onClick={() => setIsPlaying(!isPlaying)}
                     >
                         {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
@@ -157,7 +174,7 @@ export default function PrompterPage() {
             <div
                 ref={scrollerRef}
                 className={clsx(
-                    "flex-1 overflow-y-auto scroll-smooth px-[10%] py-[50vh]", // Padding to start in middle
+                    "flex-1 overflow-y-auto scroll-smooth px-4 sm:px-[10%] pt-24 sm:pt-20 pb-[50vh]", // Top padding for controls
                     isMirrored && "scale-x-[-1]"
                 )}
             >

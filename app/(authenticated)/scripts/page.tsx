@@ -27,7 +27,7 @@ export default function ScriptsPage() {
         try {
             const res = await fetch("/api/scripts");
             if (res.ok) {
-                const data = await res.json();
+                const data: Script[] = await res.json();
                 setScripts(data);
             }
         } catch (err) {
@@ -63,7 +63,7 @@ export default function ScriptsPage() {
             // 1. Fetch Doc Metadata
             const resDoc = await fetch(`/api/docs?id=${docId}`);
             if (!resDoc.ok) throw new Error("Could not access Google Doc. Check sharing permissions.");
-            const docData = await resDoc.json();
+            const docData: { title?: string } = await resDoc.json();
 
             // 2. Save to DB
             const resDb = await fetch("/api/scripts", {

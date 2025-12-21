@@ -17,8 +17,24 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const post = getPostBySlug(slug);
     if (!post) return { title: "Post Not Found" };
     return {
-        title: `${post.title} - Teleprompter24 Blog`,
+        title: post.title,
         description: post.excerpt,
+        openGraph: {
+            title: post.title,
+            description: post.excerpt,
+            type: "article",
+            publishedTime: post.date,
+            authors: [post.author],
+            url: `https://teleprompter24.com/blog/${slug}`,
+        },
+        twitter: {
+            card: "summary_large_image",
+            title: post.title,
+            description: post.excerpt,
+        },
+        alternates: {
+            canonical: `https://teleprompter24.com/blog/${slug}`,
+        },
     };
 }
 
@@ -30,8 +46,34 @@ export default async function BlogPostPage({ params }: Props) {
         notFound();
     }
 
+    const articleJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        headline: post.title,
+        description: post.excerpt,
+        author: {
+            "@type": "Person",
+            name: post.author,
+        },
+        datePublished: post.date,
+        publisher: {
+            "@type": "Organization",
+            name: "Teleprompter24",
+            url: "https://teleprompter24.com",
+        },
+        mainEntityOfPage: {
+            "@type": "WebPage",
+            "@id": `https://teleprompter24.com/blog/${slug}`,
+        },
+    };
+
     return (
-        <div className="flex min-h-screen flex-col bg-background text-foreground">
+        <>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+            />
+            <div className="flex min-h-screen flex-col bg-background text-foreground">
             <header className="sticky top-0 z-40 w-full border-b bg-background/80 backdrop-blur-md">
                 <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
                     <Link href="/" className="flex items-center gap-2 font-bold text-xl tracking-tighter">
@@ -96,6 +138,7 @@ export default async function BlogPostPage({ params }: Props) {
                     </p>
                 </div>
             </footer>
-        </div>
+            </div>
+        </>
     );
 }
