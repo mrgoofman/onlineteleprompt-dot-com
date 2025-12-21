@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Plus, Trash2, FileText, ExternalLink, Play, X, Import } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { trackEvent } from "@/lib/analytics";
 
 interface Script {
     id: string;
@@ -78,7 +79,8 @@ export default function ScriptsPage() {
 
             if (!resDb.ok) throw new Error("Failed to save script.");
 
-            // 3. Reset and Reload
+            // 3. Track and Reset
+            trackEvent("script_import");
             setImportUrl("");
             setIsImporting(false);
             fetchScripts(); // Refresh list

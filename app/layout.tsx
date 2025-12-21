@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 // Bitcount Prop Single might not be directly available in next/font/google if it's very new or has a complex family name.
-// However, search results said it's on Google Fonts. 
+// However, search results said it's on Google Fonts.
 // Standard naming convention: "Bitcount Prop Single" -> Bitcount_Prop_Single
 import { Bitcount_Prop_Single } from "next/font/google";
+import Script from "next/script";
 
 import { Providers } from "@/components/providers";
 import "./globals.css";
+
+const GA_MEASUREMENT_ID = "G-0LT892KJ4Z";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -112,6 +115,18 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="gtag-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_MEASUREMENT_ID}');
+          `}
+        </Script>
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${bitcount.variable} antialiased`}

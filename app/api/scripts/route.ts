@@ -1,13 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { getDB, D1Database } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
-// Helper to get D1 from Cloudflare context
-function getCloudflareDB() {
-    const { env } = getCloudflareContext();
-    return env.DB;
+// Helper to get D1 from Cloudflare context, with fallback for local dev
+function getCloudflareDB(): D1Database {
+    try {
+        const { env } = getCloudflareContext();
+        if (env.DB) {
+            return env.DB;
+        }
+    } catch {
+        // getCloudflareContext() throws when not in Cloudflare Workers
+    }
+    // Fallback to in-memory database for local development
+    return getDB();
 }
 
 export async function GET(req: NextRequest) {

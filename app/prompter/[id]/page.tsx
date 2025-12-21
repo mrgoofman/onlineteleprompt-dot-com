@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Settings, Play, Pause, RotateCw, ArrowLeft, Minus, Plus } from "lucide-react";
 import Link from "next/link";
 import { clsx } from "clsx";
+import { trackEvent } from "@/lib/analytics";
 
 export default function PrompterPage() {
     const params = useParams();
@@ -95,6 +96,13 @@ export default function PrompterPage() {
         };
     }, []); // Run once on mount
 
+    const handlePlayToggle = () => {
+        if (!isPlaying) {
+            trackEvent("prompter_start");
+        }
+        setIsPlaying(!isPlaying);
+    };
+
     if (loading) return <div className="flex h-screen items-center justify-center text-white bg-black">Loading...</div>;
     if (error) return <div className="flex h-screen items-center justify-center text-red-500 bg-black">{error}</div>;
 
@@ -117,7 +125,7 @@ export default function PrompterPage() {
                             "sm:hidden h-10 w-10",
                             isPlaying ? "bg-red-500 hover:bg-red-600" : "bg-primary hover:bg-primary/90"
                         )}
-                        onClick={() => setIsPlaying(!isPlaying)}
+                        onClick={handlePlayToggle}
                     >
                         {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
                     </Button>
@@ -163,7 +171,7 @@ export default function PrompterPage() {
                             "hidden sm:flex",
                             isPlaying ? "bg-red-500 hover:bg-red-600" : "bg-primary hover:bg-primary/90"
                         )}
-                        onClick={() => setIsPlaying(!isPlaying)}
+                        onClick={handlePlayToggle}
                     >
                         {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
                     </Button>
