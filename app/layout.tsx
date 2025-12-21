@@ -47,7 +47,7 @@ export const metadata: Metadata = {
     description: "Turn any device into a professional teleprompter. Syncs instantly with Google Docs. Free, simple, and works on iPhone, iPad, Android, and laptop.",
     images: [
       {
-        url: "/og-image.png",
+        url: "/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "Teleprompter24 - Free Online Teleprompter",
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Teleprompter24 - Free Online Teleprompter for Google Docs",
     description: "Turn any device into a professional teleprompter. Syncs instantly with Google Docs. Free, simple, and works on iPhone, iPad, Android, and laptop.",
-    images: ["/og-image.png"],
+    images: ["/og-image.jpg"],
   },
   robots: {
     index: true,
