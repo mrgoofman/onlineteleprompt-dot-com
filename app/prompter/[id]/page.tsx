@@ -174,7 +174,7 @@ export default function PrompterPage() {
             <div
                 ref={scrollerRef}
                 className={clsx(
-                    "flex-1 overflow-y-auto scroll-smooth px-4 sm:px-[10%] pt-24 sm:pt-20 pb-[50vh]", // Top padding for controls
+                    "flex-1 overflow-y-auto px-4 sm:px-[10%] pt-24 sm:pt-20 pb-[50vh]", // Top padding for controls
                     isMirrored && "scale-x-[-1]"
                 )}
             >
