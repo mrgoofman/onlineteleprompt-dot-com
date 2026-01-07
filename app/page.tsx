@@ -165,6 +165,38 @@ export default function LandingPage() {
           </div>
         </section>
 
+        {/* About Section - For Google OAuth Verification */}
+        <section className="py-10 sm:py-16 md:py-24 bg-muted/30">
+          <div className="container mx-auto px-4 md:px-6 max-w-4xl">
+            <div className="text-center space-y-6">
+              <h2 className="text-2xl sm:text-3xl font-bold tracking-tighter md:text-4xl">What is Teleprompter24?</h2>
+              <div className="text-left space-y-4 text-sm sm:text-base text-muted-foreground">
+                <p>
+                  <strong className="text-foreground">Teleprompter24</strong> is a free, browser-based teleprompter application that helps content creators, YouTubers, speakers, and professionals deliver scripts naturally while maintaining eye contact with their camera or audience.
+                </p>
+                <p>
+                  <strong className="text-foreground">How it works:</strong> Sign in with your Google account to import scripts directly from Google Docs. The app displays your script with adjustable scrolling speed, customizable font sizes, and mirror mode for professional teleprompter setups. Your scripts stay in sync with Google Docs, so any edits you make are reflected instantly.
+                </p>
+                <p>
+                  <strong className="text-foreground">Why we need Google access:</strong> Teleprompter24 requests read-only access to your Google Docs so we can display your scripts in the teleprompter. We never modify your documents, and we only store basic metadata (document title and link) to let you quickly access your saved scripts. Your content remains private and secure.
+                </p>
+                <p>
+                  <strong className="text-foreground">Key features:</strong> Adjustable scroll speed, font size controls, mirror/flip mode for beam splitter setups, fullscreen mode, and works on any device with a browser including phones, tablets, and laptops.
+                </p>
+              </div>
+              <div className="pt-4">
+                <Link href="/privacy" className="text-sm text-blue-600 hover:underline">
+                  Read our Privacy Policy
+                </Link>
+                <span className="text-muted-foreground mx-2">•</span>
+                <Link href="/terms" className="text-sm text-blue-600 hover:underline">
+                  Terms of Service
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Footer */}
         <footer className="border-t py-8 sm:py-12 bg-muted/20">
           <div className="container mx-auto px-4 md:px-6 flex flex-col md:flex-row justify-between items-center gap-4">
@@ -177,8 +209,8 @@ export default function LandingPage() {
             </div>
             <div className="flex gap-4 sm:gap-6 text-sm font-medium text-muted-foreground">
               <Link href="/blog" className="hover:text-foreground">Blog</Link>
-              <Link href="#" className="hover:text-foreground">Terms</Link>
-              <Link href="#" className="hover:text-foreground">Privacy</Link>
+              <Link href="/terms" className="hover:text-foreground">Terms</Link>
+              <Link href="/privacy" className="hover:text-foreground">Privacy</Link>
             </div>
             <p className="text-xs sm:text-sm text-muted-foreground text-center md:text-right">
               © {new Date().getFullYear()} teleprompter24.com
