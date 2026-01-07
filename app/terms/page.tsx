@@ -139,7 +139,7 @@ export default function TermsPage() {
                 <strong>snekmedia GmbH</strong><br />
                 Email:{" "}
                 <a href="mailto:office@snekmedia.com" className="text-blue-600 hover:underline">
-                  office@snekmedia.com
+                  office[ät]snekmedia.com
                 </a>
               </p>
             </section>
