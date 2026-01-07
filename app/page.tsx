@@ -188,6 +188,86 @@ export default function LandingPage() {
           </div>
         </section>
 
+        {/* FAQ Section - SEO */}
+        <section className="py-10 sm:py-16 md:py-24">
+          <div className="container mx-auto px-4 md:px-6 max-w-3xl">
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tighter md:text-4xl text-center mb-8 sm:mb-12">Frequently Asked Questions</h2>
+            <div className="space-y-4">
+              <details className="group border rounded-lg">
+                <summary className="flex cursor-pointer items-center justify-between p-4 sm:p-6 font-medium">
+                  <span className="text-sm sm:text-base">What is an online teleprompter?</span>
+                  <span className="ml-4 shrink-0 transition-transform group-open:rotate-180">
+                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                  </span>
+                </summary>
+                <div className="px-4 pb-4 sm:px-6 sm:pb-6 text-sm sm:text-base text-muted-foreground">
+                  An online teleprompter is a web-based tool that displays scrolling text on your screen, allowing you to read scripts while looking directly at the camera. Unlike traditional teleprompter hardware, online teleprompters work in your browser on any device, making them perfect for YouTubers, podcasters, and content creators who want a professional setup without expensive equipment.
+                </div>
+              </details>
+
+              <details className="group border rounded-lg">
+                <summary className="flex cursor-pointer items-center justify-between p-4 sm:p-6 font-medium">
+                  <span className="text-sm sm:text-base">Is Teleprompter24 free to use?</span>
+                  <span className="ml-4 shrink-0 transition-transform group-open:rotate-180">
+                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                  </span>
+                </summary>
+                <div className="px-4 pb-4 sm:px-6 sm:pb-6 text-sm sm:text-base text-muted-foreground">
+                  Yes, Teleprompter24 is completely free to use. There are no hidden fees, no premium tiers, and no credit card required. Simply sign in with your Google account to start importing and displaying your scripts.
+                </div>
+              </details>
+
+              <details className="group border rounded-lg">
+                <summary className="flex cursor-pointer items-center justify-between p-4 sm:p-6 font-medium">
+                  <span className="text-sm sm:text-base">What devices work with Teleprompter24?</span>
+                  <span className="ml-4 shrink-0 transition-transform group-open:rotate-180">
+                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                  </span>
+                </summary>
+                <div className="px-4 pb-4 sm:px-6 sm:pb-6 text-sm sm:text-base text-muted-foreground">
+                  Teleprompter24 works on any device with a modern web browser. This includes iPhones, iPads, Android phones and tablets, laptops, and desktop computers. You can even turn an old tablet into a dedicated teleprompter display for your video setup.
+                </div>
+              </details>
+
+              <details className="group border rounded-lg">
+                <summary className="flex cursor-pointer items-center justify-between p-4 sm:p-6 font-medium">
+                  <span className="text-sm sm:text-base">How do I import my script from Google Docs?</span>
+                  <span className="ml-4 shrink-0 transition-transform group-open:rotate-180">
+                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                  </span>
+                </summary>
+                <div className="px-4 pb-4 sm:px-6 sm:pb-6 text-sm sm:text-base text-muted-foreground">
+                  Simply sign in with your Google account, then paste the link to your Google Doc. Teleprompter24 will automatically fetch and display your script. Any changes you make in Google Docs will sync instantly, so you can edit your script right up until you start recording.
+                </div>
+              </details>
+
+              <details className="group border rounded-lg">
+                <summary className="flex cursor-pointer items-center justify-between p-4 sm:p-6 font-medium">
+                  <span className="text-sm sm:text-base">Does Teleprompter24 have mirror mode?</span>
+                  <span className="ml-4 shrink-0 transition-transform group-open:rotate-180">
+                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                  </span>
+                </summary>
+                <div className="px-4 pb-4 sm:px-6 sm:pb-6 text-sm sm:text-base text-muted-foreground">
+                  Yes, Teleprompter24 includes a mirror (flip) mode specifically designed for use with beam splitter teleprompter rigs. When enabled, the text is horizontally flipped so it appears correctly when reflected off the glass in front of your camera lens.
+                </div>
+              </details>
+
+              <details className="group border rounded-lg">
+                <summary className="flex cursor-pointer items-center justify-between p-4 sm:p-6 font-medium">
+                  <span className="text-sm sm:text-base">Can I control the scrolling speed?</span>
+                  <span className="ml-4 shrink-0 transition-transform group-open:rotate-180">
+                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                  </span>
+                </summary>
+                <div className="px-4 pb-4 sm:px-6 sm:pb-6 text-sm sm:text-base text-muted-foreground">
+                  Absolutely. Teleprompter24 lets you adjust the scrolling speed to match your natural reading pace. You can also change the font size to make text easier to read from a distance, and use fullscreen mode to eliminate distractions while recording.
+                </div>
+              </details>
+            </div>
+          </div>
+        </section>
+
         {/* Footer */}
         <footer className="border-t py-8 sm:py-12 bg-muted/20">
           <div className="container mx-auto px-4 md:px-6 flex flex-col md:flex-row justify-between items-center gap-4">
