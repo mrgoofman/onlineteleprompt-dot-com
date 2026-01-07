@@ -184,15 +184,6 @@ export default function LandingPage() {
                   <strong className="text-foreground">Key features:</strong> Adjustable scroll speed, font size controls, mirror/flip mode for beam splitter setups, fullscreen mode, and works on any device with a browser including phones, tablets, and laptops.
                 </p>
               </div>
-              <div className="pt-4">
-                <Link href="/privacy" className="text-sm text-blue-600 hover:underline">
-                  Read our Privacy Policy
-                </Link>
-                <span className="text-muted-foreground mx-2">•</span>
-                <Link href="/terms" className="text-sm text-blue-600 hover:underline">
-                  Terms of Service
-                </Link>
-              </div>
             </div>
           </div>
         </section>
