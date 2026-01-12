@@ -178,7 +178,7 @@ export default function LandingPage() {
                   <strong className="text-foreground">How it works:</strong> Sign in with your Google account to import scripts directly from Google Docs. The app displays your script with adjustable scrolling speed, customizable font sizes, and mirror mode for professional teleprompter setups. Your scripts stay in sync with Google Docs, so any edits you make are reflected instantly.
                 </p>
                 <p>
-                  <strong className="text-foreground">Why we need Google access:</strong> Teleprompter24 requests read-only access to your Google Docs so we can display your scripts in the teleprompter. We never modify your documents, and we only store basic metadata (document title and link) to let you quickly access your saved scripts. Your content remains private and secure.
+                  <strong className="text-foreground">Why we need Google access:</strong> Teleprompter24 requests read-only access to your Google Docs so we can display your scripts in the teleprompter. We never modify your documents, and we only store basic metadata (document title and link) to let you quickly access your saved scripts. Your content remains private and secure—see our <a href="https://teleprompter24.com/privacy" className="underline hover:text-foreground">privacy policy</a> for details.
                 </p>
                 <p>
                   <strong className="text-foreground">Key features:</strong> Adjustable scroll speed, font size controls, mirror/flip mode for beam splitter setups, fullscreen mode, and works on any device with a browser including phones, tablets, and laptops.
